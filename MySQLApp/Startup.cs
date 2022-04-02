@@ -26,6 +26,8 @@ namespace MySQLApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            //Database
             services.AddDbContext<BowlersDBContext>(options =>
            {
                //options.UseMySql(Configuration.GetConnectionString("BowlingLeagueDbConnection"));
@@ -36,6 +38,9 @@ namespace MySQLApp
             services.AddScoped<IBowlersRepository, EFBolwersRepository>();
 
             services.AddRazorPages();
+
+            //Use Blazor
+            services.AddServerSideBlazor();
 
             services.AddDistributedMemoryCache();
 
@@ -50,11 +55,13 @@ namespace MySQLApp
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
             app.UseRouting();
 
-            app.UseSession();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
@@ -63,17 +70,12 @@ namespace MySQLApp
                 new { Controller = "Home", Action = "Index" });
 
                 endpoints.MapControllerRoute(
-                    name: "paging",
-                    pattern: "{pageNum}",
-                    defaults: new { Controller = "Home", action = "Index", pageNum = 1 });
-
-                endpoints.MapControllerRoute("type",
-                    "{teamName}",
-                    new { Controller = "Home", action = "Index", pageNum = 1 });
-
-                endpoints.MapDefaultControllerRoute();
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
 
                 endpoints.MapRazorPages();
+                endpoints.MapBlazorHub();
+                endpoints.MapFallbackToPage("/edit/{*catchall}", "/Index");
             });
         }
     }

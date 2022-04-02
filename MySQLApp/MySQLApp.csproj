@@ -15,16 +15,18 @@
     <None Remove="Models\" />
     <None Remove="Microsoft.EntityFrameworkCore" />
     <None Remove="Pomelo.EntityFrameworkCore.MySql" />
-    <None Remove="Pages\" />
     <None Remove="Models\View Model\" />
     <None Remove="Infrastructure\" />
     <None Remove="Components\" />
+    <None Remove="Views\Shared\Components\" />
+    <None Remove="Views\Shared\Components\Filter\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
-    <Folder Include="Pages\" />
     <Folder Include="Models\ViewModels\" />
     <Folder Include="Infrastructure\" />
     <Folder Include="Components\" />
+    <Folder Include="Views\Shared\Components\" />
+    <Folder Include="Views\Shared\Components\Filter\" />
   </ItemGroup>
 </Project>

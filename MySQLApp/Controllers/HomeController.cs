@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MySQLApp.Models;
 using MySQLApp.Models.ViewModels;
@@ -14,43 +15,98 @@ namespace MySQLApp.Controllers
     {
         private IBowlersRepository _repo { get; set; }
 
-        public HomeController(IBowlersRepository temp)
+        private BowlersDBContext _context { get; set; }
+
+        public HomeController(IBowlersRepository temp, BowlersDBContext blah)
         {
             _repo = temp;
+            _context = blah;
+        }
+        [HttpGet]
+        public IActionResult Index(string filter, int pagNum = 1)
+        {
+            var data = _repo.Bowlers
+                .Where(b => b.Team.TeamName == filter || filter == null) 
+                .Include(x => x.Team)
+                .ToList();
+
+            if (filter != null)
+            {
+                ViewBag.Title = _repo.Bowlers.FirstOrDefault(x => x.Team.TeamName == filter);
+            }
+            else
+            {
+                ViewBag.Title = null;
+            }
+            ViewBag.Teams = _context.Teams.ToList();
+
+            return View(data);
         }
 
-        public IActionResult Index(String TeamName, int pageNum = 1)
+        //Delete functionality
+        public IActionResult DeleteBowler(int bowlerid)
         {
-            int pageSize = 10;
-            //List<Team> teams = _repo.Teams.ToList();
+            var b = _repo.Bowlers.Where(x => x.BowlerID == bowlerid).FirstOrDefault();
+            _repo.DeleteBowler(b);
 
-            //List<Bowler> bowlers = _repo.Bowlers
-            //    .OrderBy(x => x.TeamID)
-            //    .ToList();
-            ////return View(bowlers);
+            return RedirectToAction("Index");
+        }
 
-            //string teamName = TeamName;
+        //Edit functionality
+        [HttpGet]
+        public IActionResult Edit(int bowlerid)
+        {
+            ViewBag.Teams = _context.Teams.ToList();
 
-            var x = new BowlerViewModel
+            var data = _repo.Bowlers.Single(x => x.BowlerID == bowlerid);
+            return View(data);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Bowler b)
+        {
+            //Call repository save method
+            _repo.SaveBowler(b);
+            int teams = b.TeamID;
+            return RedirectToAction("Index", teams);
+        }
+
+        public IActionResult Delete(int id)
+        {
+            var b = _repo.Bowlers.FirstOrDefault(x => x.BowlerID == id);
+            _repo.DeleteBowler(b);
+            return RedirectToAction("Index");
+        }
+
+
+
+        //Add Bowler functionality
+        [HttpGet]
+        public IActionResult AddBowler()
+        {
+            return View(new Bowler());
+        }
+
+        [HttpPost]
+        public IActionResult AddBowler(Bowler b)
+        {
+            if (ModelState.IsValid)
             {
-                Bowlers = _repo.Bowlers
-                //.Where(b => b.TeamID == Team.TeamId || teamId.ToString() == null)
-                .OrderBy(b => b.BowlerLastName)
-                .Skip((pageNum - 1) * pageSize)
-                .Take(pageSize),
-
-                PageInfo = new PageInfo
+                var li = new List<int>();
+                foreach (Bowler bo in _repo.Bowlers)
                 {
-                    TotalNumTeams = (TeamName.ToString() == null
-                    ? _repo.Bowlers.Count()
-                    : _repo.Bowlers.Where(b => b.TeamID < 0).Count()),
-                    BowlersPerPage = pageSize,
-                    CurrentPage = pageNum
+                    li.Add(bo.BowlerID);
                 }
-            };
-
-            return View(x);
-            
+                b.BowlerID = li.Max() + 1;
+                _repo.AddBowler(b);
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                //Send back to view if model is not valid
+                ViewBag.Teams = _context.Teams.ToList();
+                return View();
+            }
         }
     }
 }

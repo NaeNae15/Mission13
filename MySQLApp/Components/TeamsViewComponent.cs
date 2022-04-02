@@ -15,14 +15,13 @@ namespace MySQLApp.Components
         }
         public IViewComponentResult Invoke()
         {
-            ViewBag.SelectedType = RouteData?.Values["TeamName"];
+            ViewBag.Filtered = RouteData?.Values["filter"];
 
-            var types = repo.Teams
+            var teams = repo.Teams
                 .Select(x => x.TeamName)
-                .Distinct()
-                .OrderBy(x => x);
+                .Distinct();
 
-            return View(types);
+            return View(teams);
         }
     }
 }

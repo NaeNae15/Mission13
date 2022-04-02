@@ -7,5 +7,11 @@ namespace MySQLApp.Models
     {
         IQueryable<Bowler> Bowlers { get; }
         IQueryable<Team> Teams { get; }
+
+
+        //CRUD functionality
+        public void SaveBowler(Bowler b);
+        public void AddBowler(Bowler b);
+        public void DeleteBowler(Bowler b);
     }
 }

@@ -7,6 +7,25 @@ namespace MySQLApp.Models
     {
         private BowlersDBContext _context { get; set; }
 
+        //CRUD functionality
+        public void SaveBowler(Bowler b)
+        {
+            _context.Update(b);
+            _context.SaveChanges();
+        }
+
+        public void AddBowler(Bowler b)
+        {
+            _context.Add(b);
+            _context.SaveChanges();
+        }
+
+        public void DeleteBowler(Bowler b)
+        {
+            _context.Bowlers.Remove(b);
+            _context.SaveChanges();
+        }
+
         public EFBolwersRepository (BowlersDBContext temp)
         {
             _context = temp;

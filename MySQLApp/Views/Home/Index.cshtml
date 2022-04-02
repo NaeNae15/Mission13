@@ -2,29 +2,30 @@
     ViewData["Title"] = "Home Page";
 }
 
-@model BowlerViewModel
-@*First Name, Middle Init, Last Name, Address, City, State, Zip, Phone Number*@
-@*Build in the ability to Add, Edit, and Delete bowlers.*@
-@*filter by team name, highlight team in menu and have team name = heading*@
-@*consistent navigation*@
-<ul>
-    @foreach (var b in Model.Bowlers)
-    {
-        <div class="card card-outline-primary m-1 p-1">
-            <div class="bg-faded p-1">
-                <h4>
-                    @b.BowlerFirstName Middle Init, Last Name,
-                </h4>
-            </div>
-            <div class="card-text p-1">@b.Address</div>
-            <div class="card-text p-1">@b.City</div>
-            <div class="card-text p-1">@b.State</div>
-            <div class="card-text p-1">@b.Zip</div>
-            <div class="card-text p-1">@b.PhoneNum</div>
-        </div>
-    }
-    <div page-blah="@Model.PageInfo" page-action="Index" page-classes-enabled="true"
-         page-class="btn" page-class-normal="btn-outline-dark"
-         page-class-selected="btn-primary" class="btn-group pull-right m-1">
-    </div>
+@model List<Bowler>
+<h1>@(ViewBag.Title != null ? ViewBag.Title : " All Bowlers'") Contact Information</h1>
 
+<div class="row m-1 p-1">
+    <div id="types" class="col-3">
+        <vc:teams></vc:teams>
+    </div>
+    <div class="col-9">
+        @foreach (Bowler b in Model)
+        {
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">@b.BowlerFirstName @b.BowlerMiddleInit @b.BowlerLastName </h4>
+                    <h6 class="card-text">@b.BowlerAddress</h6>
+                    <h6 class="card-text">@b.BowlerCity, @b.BowlerState @b.BowlerZip</h6>
+                    <h6 class="card-text">@b.BowlerPhoneNumber</h6>
+                    <br />
+                    <a class="btn btn-warning" style="display:unset" asp-controller="Home" asp-action="Edit" asp-route-id="@b.BowlerID">Edit</a>
+                    <a class="btn btn-danger" style="display:unset" asp-controller="Home" asp-action="Delete" asp-route-id="@b.BowlerID">Delete</a>
+
+                </div>
+
+
+            </div>
+        }
+    </div>
+</div>
