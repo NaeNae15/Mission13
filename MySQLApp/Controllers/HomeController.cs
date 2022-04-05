@@ -54,11 +54,11 @@ namespace MySQLApp.Controllers
 
         //Edit functionality
         [HttpGet]
-        public IActionResult Edit(int bowlerid)
+        public IActionResult Edit(int id)
         {
             ViewBag.Teams = _context.Teams.ToList();
 
-            var data = _repo.Bowlers.Single(x => x.BowlerID == bowlerid);
+            var data = _repo.Bowlers.Single(x => x.BowlerID == id);
             return View(data);
         }
 
@@ -73,9 +73,18 @@ namespace MySQLApp.Controllers
 
         public IActionResult Delete(int id)
         {
-            var b = _repo.Bowlers.FirstOrDefault(x => x.BowlerID == id);
-            _repo.DeleteBowler(b);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                var b = _repo.Bowlers.FirstOrDefault(x => x.BowlerID == id);
+                _repo.DeleteBowler(b);
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                //Send back to view if model is not valid
+                ViewBag.Teams = _context.Teams.ToList();
+                return View();
+            }
         }
 
 

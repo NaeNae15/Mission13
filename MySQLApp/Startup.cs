@@ -65,18 +65,32 @@ namespace MySQLApp
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute("typepage",
-                    "{teamName}/Page{pageNum}",
-                new { Controller = "Home", Action = "Index" });
+                endpoints.MapControllerRoute(
+                name: "teams",
+                pattern: "{teams}",
+                defaults: new { Controller = "Home", action = "Index" });
 
                 endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
 
-                endpoints.MapRazorPages();
-                endpoints.MapBlazorHub();
-                endpoints.MapFallbackToPage("/edit/{*catchall}", "/Index");
+
             });
+
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapControllerRoute("typepage",
+            //        "{teamName}/Page{pageNum}",
+            //    new { Controller = "Home", Action = "Index" });
+
+            //    endpoints.MapControllerRoute(
+            //        name: "default",
+            //        pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            //    endpoints.MapRazorPages();
+            //    endpoints.MapBlazorHub();
+            //    endpoints.MapFallbackToPage("/edit/{*catchall}", "/Index");
+            //});
         }
     }
 }
