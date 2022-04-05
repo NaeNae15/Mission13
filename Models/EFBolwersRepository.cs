@@ -7,6 +7,15 @@ namespace MySQLApp.Models
     {
         private BowlersDBContext _context { get; set; }
 
+
+        public EFBolwersRepository(BowlersDBContext temp)
+        {
+            _context = temp;
+        }
+        public IQueryable<Bowler> Bowlers => _context.Bowlers;
+
+        public IQueryable<Team> Teams => _context.Teams;
+
         //CRUD functionality
         public void SaveBowler(Bowler b)
         {
@@ -26,12 +35,5 @@ namespace MySQLApp.Models
             _context.SaveChanges();
         }
 
-        public EFBolwersRepository (BowlersDBContext temp)
-        {
-            _context = temp;
-        }
-        public IQueryable<Bowler> Bowlers => _context.Bowlers;
-
-        public IQueryable<Team> Teams => _context.Teams;
     }
 }

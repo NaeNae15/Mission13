@@ -73,9 +73,18 @@ namespace MySQLApp.Controllers
 
         public IActionResult Delete(int id)
         {
-            var b = _repo.Bowlers.FirstOrDefault(x => x.BowlerID == id);
-            _repo.DeleteBowler(b);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                var b = _repo.Bowlers.FirstOrDefault(x => x.BowlerID == id);
+                _repo.DeleteBowler(b);
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                //Send back to view if model is not valid
+                ViewBag.Teams = _context.Teams.ToList();
+                return View();
+            }
         }
 
 
