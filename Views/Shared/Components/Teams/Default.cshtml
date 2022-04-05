@@ -1,0 +1,22 @@
+﻿@{
+}
+
+<!--Get the list being passed in by the FilterViewComponent page-->
+@model IEnumerable<string>
+<!--View Component for the left side of the page. Allows for highlighting of selected attribute.-->
+
+<div class="d-grid gap-2">
+
+    <div>
+        <!--Option to not filter-->
+        <a asp-controller="Home" asp-action="Index" asp-route-filter="" class="btn btn-block btn-outline-info">None</a>
+
+        <!--For each string passed in by our model, create an option tag-->
+        @foreach (string t in Model)
+        {
+            //Send in the chosen team and highlight that team in the list if they have been selected
+            <a asp-controller="Home" asp-action="Index" asp-route-filter="@t"
+               class="btn btn-block @(ViewBag.Filtered == t ? "btn-primary" : "btn-outline-info")">@t</a>
+        }
+    </div>
+</div>

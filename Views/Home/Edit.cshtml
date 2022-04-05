@@ -1,0 +1,75 @@
+﻿@{
+}
+
+
+@model Bowler
+
+<h2>Edit Bowler Information</h2>
+
+<!--Editform-->
+<form method="post">
+
+    <!--Show validation errors-->
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+
+    <!--Bowler ID disabled-->
+    <div class="form-group">
+        <label>Bowler ID</label>
+        <input class="form-control" disabled value="@Model.BowlerID" />
+    </div>
+    <!--Last name-->
+    <div class="form-group">
+        <label asp-for="BowlerLastName">Last Name</label>
+        <input class="form-control" asp-for="BowlerLastName">
+    </div>
+    <!--First name-->
+    <div class="form-group">
+        <label asp-for="BowlerFirstName">First Name</label>
+        <input class="form-control" asp-for="BowlerFirstName">
+    </div>
+    <!--Middle Initial-->
+    <div class="form-group">
+        <label asp-for="BowlerMiddleInit">Middle Initial</label>
+        <input class="form-control" asp-for="BowlerMiddleInit">
+    </div>
+    <!--Address-->
+    <div class="form-group">
+        <label asp-for="BowlerAddress">Address</label>
+        <input class="form-control" asp-for="BowlerAddress">
+    </div>
+    <!--City-->
+    <div class="form-group">
+        <label asp-for="BowlerCity">City</label>
+        <input class="form-control" asp-for="BowlerCity" />
+    </div>
+    <!--State-->
+    <div class="form-group">
+        <label asp-for="BowlerState">State</label>
+        <input class="form-control" asp-for="BowlerState" />
+    </div>
+    <!--Zip-->
+    <div class="form-group">
+        <label asp-for="BowlerZip">Zip Code</label>
+        <input class="form-control" asp-for="BowlerZip" />
+    </div>
+    <!--Phone Number-->
+    <div class="form-group">
+        <label asp-for="BowlerPhoneNumber">Phone Number</label>
+        <input class="form-control" asp-for="BowlerPhoneNumber" />
+    </div>
+    <!--Team Name-->
+    <div class="form-group">
+        <label asp-for="TeamID">Team Name</label>
+        <select asp-for="TeamID">
+            @foreach (Team t in ViewBag.Teams)
+            {
+                <option value="@t.TeamID">@t.TeamName</option>
+            }
+        </select>
+    </div>
+
+    <!--Save and cancle buttons-->
+    <button class="btn btn-primary" type="submit">Save</button>
+    <a class="btn btn-secondary" href="/">Cancel</a>
+
+</form>
